@@ -4,8 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Email {
-    EmailType type;
-    List<Wort> woerter = new ArrayList<>();
+    private EmailType type;
+    private List<Wort> woerter = new ArrayList<>();
+    private double spamWahrscheinlichkeit;
+
+    public double getSpamWahrscheinlichkeit() {
+        return spamWahrscheinlichkeit;
+    }
+
+    public void setSpamWahrscheinlichkeit(double spamWahrscheinlichkeit) {
+        this.spamWahrscheinlichkeit = spamWahrscheinlichkeit;
+    }
 
     public Email(EmailType type, List<Wort> woerter) {
         this.type = type;
@@ -26,5 +35,9 @@ public class Email {
 
     public void setWoerter(List<Wort> woerter) {
         this.woerter = woerter;
+    }
+
+    public void addWort(Wort neuesWort) {
+        this.woerter.add(neuesWort);
     }
 }

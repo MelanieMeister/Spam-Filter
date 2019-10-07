@@ -1,6 +1,6 @@
-package main.java.src.fhwn.ch.brugg;
+package main.java.src.ch.brugg.fhwn;
 
-import main.java.src.fhwn.ch.brugg.dto.Wort;
+import main.java.src.ch.brugg.fhwn.dto.Wort;
 
 import java.util.ArrayList;
 import java.util.List;

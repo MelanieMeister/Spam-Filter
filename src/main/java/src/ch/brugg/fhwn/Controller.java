@@ -10,10 +10,9 @@ import java.util.List;
 //TODO Mel
 public class Controller {
 
-    private Reader reader = new Reader();
-
     //TODO muss definiert werden
     private final int SCHWELLENWERT = 0;
+    private Reader reader = new Reader();
     private List<Wort> woerter = new ArrayList<>();
 
     //TODO
@@ -25,6 +24,8 @@ public class Controller {
     public void woerterDurchgehen() {
         this.hamMailWoerterVergleichMitWortListe();
         this.spamMailWoerterVergleichMitWortListe();
+
+        spamwahrscheinlichkeitWort();
     }
 
     private void hamMailWoerterVergleichMitWortListe() {
@@ -57,10 +58,39 @@ public class Controller {
 
     //Mit Bayes berechnen
     public void spamwahrscheinlichkeitWort() {
+        for (Email email : this.reader.getSpamMails()) {
+            for (Wort wort : email.getWoerter()) {
+                setSpamwahrscheinlichkeitByWort(wort);
+            }
+        }
     }
+
 
     //TODO alle Spamwahrscheinlichkeiten -hamWahrscheinlichkeiten ausrechnen
     public void spamWahrscheinlichlkeitMail() {
     }
 
+
+    private void setSpamwahrscheinlichkeitByWort(Wort wort) {
+        int anzahlMail = reader.getHamMails().size() + reader.getSpamMails().size();
+
+        double zaehler = wort.getAnzahlHamMails() / anzahlMail;
+        double nenner = (wort.getAnzahlHamMails() + wort.getAnzahlSpamMails()) / anzahlMail;
+
+        wort.setSpamWahrscheinlichekeit(zaehler / nenner);
+    }
+
+
+    //Todo Melanie: Kontrollieren, welche Methode korrekt ist (evtl. ergibt es dasselbe Resultat)
+    private void setSpamwahrscheinlichkeitByWort2(Wort wort) {
+        int anzahlMail = reader.getHamMails().size() + reader.getSpamMails().size();
+
+        double P_SpamWord = wort.getAnzahlSpamMails() / anzahlMail;
+        double P_Spam = 0.5;
+        double P_HamWord = wort.getAnzahlHamMails() / anzahlMail;
+        double P_Ham = 0.5;
+
+        double wahrscheinlichkeit = P_SpamWord * P_Spam / (P_SpamWord * P_Spam + P_HamWord * P_Ham);
+        wort.setSpamWahrscheinlichekeit(wahrscheinlichkeit);
+    }
 }

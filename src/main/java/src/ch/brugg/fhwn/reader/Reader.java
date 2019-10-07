@@ -1,6 +1,6 @@
-package main.java.src.fhwn.ch.brugg.reader;
+package main.java.src.ch.brugg.fhwn.reader;
 
-import main.java.src.fhwn.ch.brugg.dto.Email;
+import main.java.src.ch.brugg.fhwn.dto.Email;
 
 import java.util.ArrayList;
 import java.util.List;

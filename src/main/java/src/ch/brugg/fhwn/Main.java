@@ -1,4 +1,4 @@
-package main.java.src.fhwn.ch.brugg;
+package main.java.src.ch.brugg.fhwn;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

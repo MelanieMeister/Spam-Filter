@@ -5,6 +5,8 @@ import main.java.src.ch.brugg.fhwn.dto.Wort;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO Mel
 public class Controller {
 
     //TODO muss definiert werden

@@ -34,7 +34,7 @@ public class Reader {
 
     public void enzippen(File archive, File destDir) throws IOException {
         if (!destDir.exists()) {
-            System.out.println(destDir+ ": Directory existiert noch nicht und wir angelegt");
+            System.out.println(destDir + ": Directory existiert noch nicht und wir angelegt");
             destDir.mkdir();
         }
 
@@ -81,10 +81,10 @@ public class Reader {
     public File[] listDir(File dir) {
 
         File[] files = dir.listFiles();
-        System.out.println("Anzahl entpackten Files: " +files.length);
+        System.out.println("Anzahl entpackten Files: " + files.length);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
-               // System.out.print(files[i].getAbsolutePath());
+                // System.out.print(files[i].getAbsolutePath());
 
             }
         }
@@ -98,11 +98,12 @@ public class Reader {
         this.hamFileList = this.listDir(new File(PATHNAME_HAM));
         this.spamFileList = this.listDir(new File(PATHNAME_SPAM));
 
-        System.out.println(this.hamFileList.length+ " Ham und "+this.spamFileList.length+": Spammails wurden eingelesen");
+        System.out.println(
+                this.hamFileList.length + " Ham und " + this.spamFileList.length + ": Spammails wurden eingelesen");
         this.importSpamMail();
         this.importHamMail();
-        System.out.println("Anzahl Ham Mails"+this.hamMails.size());
-        System.out.println("Anzahl Spam Mails"+this.spamMails.size());
+        System.out.println("Anzahl Ham Mails" + this.hamMails.size());
+        System.out.println("Anzahl Spam Mails" + this.spamMails.size());
     }
 
     //TODO lesen des mails, erstellen des mails mit wortliste und in spam/ham Liste speichern
@@ -115,15 +116,17 @@ public class Reader {
 
             try {
                 BufferedReader br;
-             //   System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
+                //   System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
                 br = new BufferedReader(new FileReader(spamFile));
                 String linie = br.readLine();
-                System.out.println(linie.toString() +" diese Linie wird geprüft");
-                //while (linie != null) {
+                System.out.println(linie.toString() + " diese Linie wird geprüft");
 
+                while (linie != null) {
                     this.wortListeInEmailBefuellen(linie, email);
-                //    br.readLine();
-                //}
+                    linie = br.readLine();
+                }
+
+                System.out.println("Diese Mail hat " + email.getWoerter().size() + "  Woerter");
 
                 spamMails.add(email);
 
@@ -148,24 +151,24 @@ public class Reader {
         System.out.println("Ham Mails werden importiert");
         for (File hamFile : this.hamFileList) {
 
-                List<Wort> woerterListe = new ArrayList();
-                Email email = new Email(EmailType.HAM, woerterListe);
+            List<Wort> woerterListe = new ArrayList();
+            Email email = new Email(EmailType.HAM, woerterListe);
 
-                try {
-                    BufferedReader br;
-                    //   System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
-                    br = new BufferedReader(new FileReader(hamFile));
-                    String linie = br.readLine();
-                    System.out.println(linie.toString() +" diese Linie wird geprüft");
-                    //while (linie != null) {
+            try {
+                BufferedReader br;
+                //   System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
+                br = new BufferedReader(new FileReader(hamFile));
+                String linie = br.readLine();
+                System.out.println(linie.toString() + " diese Linie wird geprüft");
+                //while (linie != null) {
 
-                    this.wortListeInEmailBefuellen(linie, email);
-                    //    br.readLine();
-                    //}
+                this.wortListeInEmailBefuellen(linie, email);
+                //    br.readLine();
+                //}
 
-                    hamMails.add(email);
+                hamMails.add(email);
 
-                    br.close();
+                br.close();
 
             } catch (FileNotFoundException e) {
 
@@ -180,33 +183,34 @@ public class Reader {
     }
 
     private void wortListeInEmailBefuellen(String linie, Email email) {
-      //  System.out.println("wortListeInEmailBefuellen startet");
+        List<Wort> woerterInMail = email.getWoerter();
+        //  System.out.println("wortListeInEmailBefuellen startet");
         String[] wortBezeichnungen = linie.split("\\s");
-
+        System.out.println("Anzahl Woerter in Linie:" + wortBezeichnungen.length);
 
         for (int i = 0; i < wortBezeichnungen.length; i++) {
-        //    System.out.println(wortBezeichnungen[i]+ " wird geprüft");
-        //    System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
-         //   if (null == email.getWoerter()||email.getWoerter().size()==0){
-                Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
-           //     System.out.println("neues wort wurde gefunden");
-email.addWort(neuesWort);
-          //  }
+            //    System.out.println(wortBezeichnungen[i]+ " wird geprüft");
+            //    System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
+               if (null == email.getWoerter()||email.getWoerter().size()==0){
+            Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
+            //     System.out.println("neues wort wurde gefunden");
+            email.addWort(neuesWort);
+             }
 
-/**
-            for (Wort wort : email.getWoerter()) {
-                System.out.println(wort+ "wird geprüft");
-                if (!wort.getBezeichnug().equals(wortBezeichnungen[i])) {
-                    Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
-                    System.out.println("neues wort wurde gefunden");
-                    email.addWort(neuesWort);
-                }
+             for (Wort wort :woerterInMail) {
 
-            }
- */        }
+           //  System.out.println(wort+ "wird geprüft");
+             if (!wort.getBezeichnug().equals(wortBezeichnungen[i])) {
+             Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
+            // System.out.println("neues wort wurde gefunden");
+             email.addWort(neuesWort);
+             break;
+             }
+             }
+
+             }
 
     }
-
 
     public List<Email> getHamMails() {
         return hamMails;

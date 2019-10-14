@@ -100,7 +100,7 @@ public class Reader {
 
         System.out.println(this.hamFileList.length+ " Ham und "+this.spamFileList.length+": Spammails wurden eingelesen");
         this.importSpamMail();
-        this.importHamMail();
+      //g  this.importHamMail();
         System.out.println("Anzahl Ham Mails"+this.hamMails.size());
         System.out.println("Anzahl Spam Mails"+this.spamMails.size());
     }
@@ -109,18 +109,21 @@ public class Reader {
     public void importSpamMail() {
         System.out.println("Spam Mails werden importiert");
         for (File spamFile : this.spamFileList) {
-            BufferedReader br;
+
+            List<Wort> woerterListe = new ArrayList();
+            Email email = new Email(EmailType.SPAM, woerterListe);
+
             try {
-                System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
+                BufferedReader br;
+             //   System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
                 br = new BufferedReader(new FileReader(spamFile));
                 String linie = br.readLine();
-                System.out.println(linie +" diese Linie wird geprüft");
-                List<Wort> woerterListe = new ArrayList();
-                Email email = new Email(EmailType.SPAM, woerterListe);
-                while (linie != null) {
+                System.out.println(linie.toString() +" diese Linie wird geprüft");
+                //while (linie != null) {
+
                     this.wortListeInEmailBefuellen(linie, email);
-                    br.readLine();
-                }
+                //    br.readLine();
+                //}
 
                 spamMails.add(email);
 
@@ -144,15 +147,16 @@ public class Reader {
     public void importHamMail() {
         System.out.println("Ham Mails werden importiert");
         for (File hamFile : this.hamFileList) {
-
+            List<Wort> woerterListe = new ArrayList();
+            Email email = new Email(EmailType.HAM, woerterListe);
             BufferedReader br;
             try {
                 br = new BufferedReader(new FileReader(hamFile.getAbsolutePath().substring(hamFile.getAbsolutePath().lastIndexOf("\\")+1)));
                 String linie = br.readLine();
-                List<Wort> woerterListe = new ArrayList();
-                Email email = new Email(EmailType.HAM, woerterListe);
+
                 while (linie != null) {
                     this.wortListeInEmailBefuellen(linie, email);
+                    linie= br.readLine();
                 }
 
                 spamMails.add(email);
@@ -172,16 +176,16 @@ public class Reader {
     }
 
     private void wortListeInEmailBefuellen(String linie, Email email) {
-        System.out.println("wortListeInEmailBefuellen startet");
-        String[] wortBezeichnungen = linie.split("\\s+");
+      //  System.out.println("wortListeInEmailBefuellen startet");
+        String[] wortBezeichnungen = linie.split("\\s");
 
 
         for (int i = 0; i < wortBezeichnungen.length; i++) {
-            System.out.println(wortBezeichnungen[i]+ " wird geprüft");
-            System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
+        //    System.out.println(wortBezeichnungen[i]+ " wird geprüft");
+        //    System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
          //   if (null == email.getWoerter()||email.getWoerter().size()==0){
                 Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
-                System.out.println("neues wort wurde gefunden");
+           //     System.out.println("neues wort wurde gefunden");
 email.addWort(neuesWort);
           //  }
 

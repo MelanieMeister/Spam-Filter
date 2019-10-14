@@ -121,13 +121,14 @@ public class Reader {
 
             } catch (FileNotFoundException e) {
 
+                System.out.println("Bei importSpamMail ist was schief gelaufen");
                 e.printStackTrace();
 
             } catch (IOException e) {
-
+                System.out.println("Bei importSpamMail ist was schief gelaufen");
                 e.printStackTrace();
             }
-            System.out.println("");
+            System.out.println("bei importSpamMail ist alles gut gelaufen");
         }
 
     }

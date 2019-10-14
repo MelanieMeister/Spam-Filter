@@ -179,13 +179,13 @@ public class Reader {
         for (int i = 0; i < wortBezeichnungen.length; i++) {
             System.out.println(wortBezeichnungen[i]+ " wird geprüft");
             System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
-            if (null == email.getWoerter()||email.getWoerter().size()==0){
+         //   if (null == email.getWoerter()||email.getWoerter().size()==0){
                 Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
                 System.out.println("neues wort wurde gefunden");
 email.addWort(neuesWort);
-            }
+          //  }
 
-
+/**
             for (Wort wort : email.getWoerter()) {
                 System.out.println(wort+ "wird geprüft");
                 if (!wort.getBezeichnug().equals(wortBezeichnungen[i])) {
@@ -195,7 +195,7 @@ email.addWort(neuesWort);
                 }
 
             }
-        }
+ */        }
 
     }
 

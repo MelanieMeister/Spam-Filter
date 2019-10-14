@@ -111,12 +111,15 @@ public class Reader {
         for (File spamFile : this.spamFileList) {
             BufferedReader br;
             try {
+                System.out.println(spamFile.getAbsolutePath().toString()+ " File wird geprüft");
                 br = new BufferedReader(new FileReader(spamFile));
                 String linie = br.readLine();
+                System.out.println(linie +" diese Linie wird geprüft");
                 List<Wort> woerterListe = new ArrayList();
                 Email email = new Email(EmailType.SPAM, woerterListe);
                 while (linie != null) {
                     this.wortListeInEmailBefuellen(linie, email);
+                    br.readLine();
                 }
 
                 spamMails.add(email);
@@ -169,14 +172,25 @@ public class Reader {
     }
 
     private void wortListeInEmailBefuellen(String linie, Email email) {
-
+        System.out.println("wortListeInEmailBefuellen startet");
         String[] wortBezeichnungen = linie.split("\\s+");
 
-        for (String wortInLinie : wortBezeichnungen) {
+
+        for (int i = 0; i < wortBezeichnungen.length; i++) {
+            System.out.println(wortBezeichnungen[i]+ " wird geprüft");
+            System.out.println(email.getWoerter().size() +"Anzahl woerter im mail");
+            if (null == email.getWoerter()||email.getWoerter().size()==0){
+                Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
+                System.out.println("neues wort wurde gefunden");
+email.addWort(neuesWort);
+            }
+
 
             for (Wort wort : email.getWoerter()) {
-                if (!wort.getBezeichnug().equals(wortInLinie)) {
-                    Wort neuesWort = new Wort(wortInLinie, 0, 0, 0.0, 0.0);
+                System.out.println(wort+ "wird geprüft");
+                if (!wort.getBezeichnug().equals(wortBezeichnungen[i])) {
+                    Wort neuesWort = new Wort(wortBezeichnungen[i], 0, 0, 0.0, 0.0);
+                    System.out.println("neues wort wurde gefunden");
                     email.addWort(neuesWort);
                 }
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Email {
     private EmailType type;
-    private List<Wort> woerter = new ArrayList<>();
+    private List<Wort> woerter = new ArrayList<Wort>();
     private double spamWahrscheinlichkeit;
 
     public double getSpamWahrscheinlichkeit() {

@@ -21,8 +21,14 @@ public class Reader {
     private List<Email> hamMails = new ArrayList<>();
     private List<Email> spamMails = new ArrayList<>();
 
-    private static final String PATHNAME_HAM = "./resources/";
-    private static final String PATHNAME_SPAM = "./resources/";
+    private File[] spamFileList;
+    private File[] hamFileList;
+
+    private static final String PATHNAME_HAM_ZIP = "./resources/ham-anlern.zip";
+    private static final String PATHNAME_SPAM_ZIP = "./resources/spam-anlern.zip";
+
+    private static final String PATHNAME_HAM = "./resources/entpacktefiles/ham";
+    private static final String PATHNAME_SPAM = "./resources/entpacktefiles/spam";
 
     private InputStream input;
 
@@ -71,88 +77,90 @@ public class Reader {
         return new File(destDir, internalPathToEntry);
     }
 
-    public void listDir(File dir) {
+    public File[] listDir(File dir) {
 
         File[] files = dir.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 System.out.print(files[i].getAbsolutePath());
-                if (files[i].isDirectory()) {
-                    System.out.print(" (Ordner)\n");
-                    listDir(files[i]); // ruft sich selbst mit dem
-                    // Unterverzeichnis als Parameter auf
-                } else {
-                    System.out.print(" (Datei)\n");
-                }
+
             }
         }
+        return files;
     }
 
     //TODO alle entippten Mails durchgehen und importieren
-    public void mailsParsen() {
-        this.enzippen();
-        this.enzippen();
-       this.listDir();
-       this.listDir();
+    public void mailsParsen() throws IOException {
+        this.enzippen(new File(PATHNAME_HAM_ZIP), new File(PATHNAME_HAM));
+        this.enzippen(new File(PATHNAME_SPAM_ZIP), new File(PATHNAME_SPAM));
+        this.hamFileList = this.listDir(new File(PATHNAME_HAM));
+        this.spamFileList = this.listDir(new File(PATHNAME_SPAM));
         this.importSpamMail();
         this.importHamMail();
-
+        System.out.println("Anzahl Ham Mails"+this.hamMails.size());
+        System.out.println("Anzahl Spam Mails"+this.spamMails.size());
     }
 
     //TODO lesen des mails, erstellen des mails mit wortliste und in spam/ham Liste speichern
     public void importSpamMail() {
 
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader());
-            String linie = br.readLine();
-            List<Wort> woerterListe = new ArrayList();
-            Email email = new Email(EmailType.SPAM, woerterListe);
-            while (linie != null) {
-                this.wortListeInEmailBefuellen(linie, email);
+        for (File spamFile : this.spamFileList) {
+            BufferedReader br;
+            try {
+                br = new BufferedReader(new FileReader(spamFile));
+                String linie = br.readLine();
+                List<Wort> woerterListe = new ArrayList();
+                Email email = new Email(EmailType.SPAM, woerterListe);
+                while (linie != null) {
+                    this.wortListeInEmailBefuellen(linie, email);
+                }
+
+                spamMails.add(email);
+
+                br.close();
+
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
             }
-
-            spamMails.add(email);
-
-            br.close();
-
-        } catch (FileNotFoundException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
+            System.out.println("");
         }
-        System.out.println("");
+
     }
 
     //TODO lesen des mails, erstellen des mails mit wortliste und in spam/ham Liste speichern
     public void importHamMail() {
 
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader());
-            String linie = br.readLine();
-            List<Wort> woerterListe = new ArrayList();
-            Email email = new Email(EmailType.HAM, woerterListe);
-            while (linie != null) {
-                this.wortListeInEmailBefuellen(linie, email);
+        for (File hamFile : this.hamFileList) {
+
+            BufferedReader br;
+            try {
+                br = new BufferedReader(new FileReader(hamFile.getAbsolutePath().substring(hamFile.getAbsolutePath().lastIndexOf("\\")+1)));
+                String linie = br.readLine();
+                List<Wort> woerterListe = new ArrayList();
+                Email email = new Email(EmailType.HAM, woerterListe);
+                while (linie != null) {
+                    this.wortListeInEmailBefuellen(linie, email);
+                }
+
+                spamMails.add(email);
+
+                br.close();
+
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
             }
-
-            spamMails.add(email);
-
-            br.close();
-
-        } catch (FileNotFoundException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
+            System.out.println("");
         }
-        System.out.println("");
     }
 
     private void wortListeInEmailBefuellen(String linie, Email email) {

@@ -15,8 +15,6 @@ public class Controller {
     private Reader reader = new Reader();
     private List<Wort> woerter = new ArrayList<>();
 
-    //Todo Faustina: kannst Du mir hier eine Liste mit allen Mails geben?
-    private List<Email> emailList = new ArrayList<>();
 
     //TODO
     //Hier werden alle Mails durch iteriert
@@ -29,7 +27,8 @@ public class Controller {
         this.spamMailWoerterVergleichMitWortListe();
 
         spamwahrscheinlichkeitWort();
-        spamWahrscheinlichlkeitMail();
+        spamWahrscheinlichlkeitMail(reader.getHamMails());
+        spamWahrscheinlichlkeitMail(reader.getSpamMails());
     }
 
     private void hamMailWoerterVergleichMitWortListe() {
@@ -71,7 +70,7 @@ public class Controller {
 
 
     //TODO alle Spamwahrscheinlichkeiten -hamWahrscheinlichkeiten ausrechnen
-    public void spamWahrscheinlichlkeitMail() {
+    public void spamWahrscheinlichlkeitMail(List<Email> emailList) {
         for (Email email : emailList) {
             double spamWahrscheinlichkeit = 1.0;
             for (Wort wort : email.getWoerter()) {

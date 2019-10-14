@@ -1,4 +1,4 @@
-package main.java.src.ch.brugg.fhwn.dto;
+package src.ch.brugg.fhwn.dto;
 
 public class Wort {
    private String bezeichnug;

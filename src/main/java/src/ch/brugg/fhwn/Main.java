@@ -1,11 +1,11 @@
-package main.java.src.ch.brugg.fhwn;
+package src.ch.brugg.fhwn;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.java.src.ch.brugg.fhwn.reader.Reader;
+import src.ch.brugg.fhwn.reader.Reader;
 
 import java.io.IOException;
 

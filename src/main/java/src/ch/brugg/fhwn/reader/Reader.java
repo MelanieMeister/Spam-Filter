@@ -1,8 +1,8 @@
-package main.java.src.ch.brugg.fhwn.reader;
+package src.ch.brugg.fhwn.reader;
 
-import main.java.src.ch.brugg.fhwn.dto.Email;
-import main.java.src.ch.brugg.fhwn.dto.EmailType;
-import main.java.src.ch.brugg.fhwn.dto.Wort;
+import src.ch.brugg.fhwn.dto.Email;
+import src.ch.brugg.fhwn.dto.EmailType;
+import src.ch.brugg.fhwn.dto.Wort;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,16 +24,17 @@ public class Reader {
     private File[] spamFileList;
     private File[] hamFileList;
 
-    private static final String PATHNAME_HAM_ZIP = "./resources/ham-anlern.zip";
-    private static final String PATHNAME_SPAM_ZIP = "./resources/spam-anlern.zip";
+    private static final String PATHNAME_HAM_ZIP = "src/main/java/resources/ham-anlern.zip";
+    private static final String PATHNAME_SPAM_ZIP = "src/main/java/resources/spam-anlern.zip";
 
-    private static final String PATHNAME_HAM = "./resources/entpacktefiles/ham";
-    private static final String PATHNAME_SPAM = "./resources/entpacktefiles/spam";
+    private static final String PATHNAME_HAM = "src/main/java/resources/entpacktefiles/ham";
+    private static final String PATHNAME_SPAM = "src/main/java/resources/entpacktefiles/spam";
 
     private InputStream input;
 
     public void enzippen(File archive, File destDir) throws IOException {
         if (!destDir.exists()) {
+            System.out.println(destDir+ ": Directory existiert noch nicht und wir angelegt");
             destDir.mkdir();
         }
 
@@ -80,9 +81,10 @@ public class Reader {
     public File[] listDir(File dir) {
 
         File[] files = dir.listFiles();
+        System.out.println("Anzahl entpackten Files: " +files.length);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
-                System.out.print(files[i].getAbsolutePath());
+               // System.out.print(files[i].getAbsolutePath());
 
             }
         }
@@ -95,6 +97,8 @@ public class Reader {
         this.enzippen(new File(PATHNAME_SPAM_ZIP), new File(PATHNAME_SPAM));
         this.hamFileList = this.listDir(new File(PATHNAME_HAM));
         this.spamFileList = this.listDir(new File(PATHNAME_SPAM));
+
+        System.out.println(this.hamFileList.length+ " Ham und "+this.spamFileList.length+": Spammails wurden eingelesen");
         this.importSpamMail();
         this.importHamMail();
         System.out.println("Anzahl Ham Mails"+this.hamMails.size());
@@ -103,7 +107,7 @@ public class Reader {
 
     //TODO lesen des mails, erstellen des mails mit wortliste und in spam/ham Liste speichern
     public void importSpamMail() {
-
+        System.out.println("Spam Mails werden importiert");
         for (File spamFile : this.spamFileList) {
             BufferedReader br;
             try {
@@ -135,7 +139,7 @@ public class Reader {
 
     //TODO lesen des mails, erstellen des mails mit wortliste und in spam/ham Liste speichern
     public void importHamMail() {
-
+        System.out.println("Ham Mails werden importiert");
         for (File hamFile : this.hamFileList) {
 
             BufferedReader br;
@@ -166,7 +170,7 @@ public class Reader {
 
     private void wortListeInEmailBefuellen(String linie, Email email) {
 
-        String[] wortBezeichnungen = linie.split("");
+        String[] wortBezeichnungen = linie.split("\\s+");
 
         for (String wortInLinie : wortBezeichnungen) {
 
@@ -181,12 +185,6 @@ public class Reader {
 
     }
 
-    public void readMails() {
-
-    }
-
-    public void entpacker() {
-    }
 
     public List<Email> getHamMails() {
         return hamMails;

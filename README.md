@@ -1,1 +1,2 @@
-"# dist_Spam-Filter" 
+# Spam-Filter
+simple SpamFiler for the modul "dist" (diskreten Stochastik).
